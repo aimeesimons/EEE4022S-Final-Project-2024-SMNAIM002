@@ -1,0 +1,9 @@
+pickle
+matplotlib
+pytorch==
+tensorflow==
+scikit-learn==
+pandas==
+numpy==
+pywt==
+random==
