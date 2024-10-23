@@ -420,7 +420,7 @@ def harmonics(signal, base_freq=50, harmonics_order=[3, 5], amplitudes=[50, -50]
 
 
 # Switching noise
-def switching_noise(signal, noise_amplitude=10.0, switch_count=5):
+def switching_noise(signal, noise_amplitude=0.5, switch_count=5):
     noisy_signal = signal.copy()
     for _ in range(switch_count):
         idx = np.random.randint(0, len(signal))
@@ -447,7 +447,7 @@ def flicker_noise(signal, beta=1):
 
 
 # Impulse Noise (Bust Noise)
-def impulse_noise(signal, impulse_amplitude=0.5, impulse_count=10):
+def impulse_noise(signal, impulse_amplitude=2.5, impulse_count=10):
     noisy_signal = signal.copy()
     for _ in range(impulse_count):
         idx = np.random.randint(0, len(signal))
@@ -573,7 +573,7 @@ initiate = True
 if initiate == False:
   value = 'No'
 loc = random.randint(0,100)
-fault = initiate_short_circuit('Central-NE S1/BB1.ElmTerm',fault_location=None, fault_type=key1, phase=key2, start_time=start_time, end_time=start_time + 0.5, initiate=initiate)
+fault = initiate_short_circuit('SE - NW 400kV_a.ElmLne',fault_location=loc, fault_type=key1, phase=key2, start_time=start_time, end_time=start_time + 0.5, initiate=initiate)
 # Extract and save the simulation results
 output = f'C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Integration\\{value}_fault.csv'
 save_simulation_results(MONITORED_VARIABLES, output)
@@ -642,7 +642,7 @@ if pred_class=='Fault Detected':
             if line=='SE - NW 400kV_a':
               locate_line(line)
             else:
-              locate_line("SE - NW 400kV_a")
+              locate_line("SE - NW 400kV_a") #if the model guesses incorrectly
         elif edge_preds[0][0]=='Node':
          app.PrintPlain(f'Fault occurred on Bus {node_preds[0][0]}')  
         end_time = time.time()
