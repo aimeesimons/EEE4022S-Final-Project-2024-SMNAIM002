@@ -14,9 +14,12 @@ import seaborn as sns
 
 classes_classification = ['AG','BG','CG','ABG','BCG','ACG','AB','BC','AC','ABC','NNNN']
 
+#This uploads the classification data. If the machine can't handle it, comment out lines 18 to 20 and uncomment line 22. Then first run test.py
+X_classify_input1 = joblib.load("X_classify_input_noisy_varied1.pkl") #comment if test.py is run
+X_classify_input2 = joblib.load("X_classify_input_noisy_fixed1.pkl") #comment if test.py is run
+X_classify_input = np.concatenate((X_classify_input1,X_classify_input2), axis=0) #comment if test.py is run
 
-
-X_classify_input = joblib.load("X_classify_input.pkl") #upload data
+# X_classify_input = joblib.load("X_classify_input.pkl") #upload data uncomment if test.py is run
 
 with open("y_classify.pickle", "rb") as f:
     y_classify = pickle.load(f)
