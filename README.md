@@ -8,7 +8,10 @@ This repository contains the following directories and files:
   - DataCollection.ipynb
   - feature_extraction.ipynb
   - Noise.ipynb
-- Location Data/
+- Data/ (which pertains to the label data and linked datasets)
+- DigSilent Models/  (which pertains to the scripts used to collect and prepare the data for training)
+  - FinalModelEEE4002S -> which is the 21-Bus system
+  - TesterModelEEE4022S -> which is the built tester model
 - Model Training/ (which pertains to the Python files utilised in training the respective models)
   - X_classify.py
   - X_detect.py
@@ -26,7 +29,7 @@ This repository contains the following directories and files:
   - model_edge_2.pth -> Edge Model
   - model_node_2.pth -> Node Model
   - ordinal_encoder.pickle -> used for encoding and decoding the labels for the detection model
-- Results/
+- Results/  (which pertains to the results received from the line models)
 - Simulation Scripts/ (which pertains to the Python files utilised in DigSilent's embedded Python environment and used to run various simulations)
   - GraphsScript.py -> for collecting the data to create the graphs
   - IntegrationTest.py -> for integrating all fault identification tasks together
