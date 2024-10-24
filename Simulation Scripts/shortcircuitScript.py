@@ -98,7 +98,7 @@ def save_simulation_results(monitored_variables, output_file):
 
 
 MONITORED_VARIABLES = {
-    'CentralLoad.ElmLne': ['m:I:bus1:A', 'm:I:bus1:B', 'm:I:bus1:C', 'n:U:bus1:A', 'n:U:bus1:B', 'n:U:bus1:C']
+    'Central Load.ElmLod': ['m:I:bus1:A', 'm:I:bus1:B', 'm:I:bus1:C', 'n:U:bus1:A', 'n:U:bus1:B', 'n:U:bus1:C'] # change Central load to {lineName}.ElmLne for collecting from a line
 }
 
 faults = {
@@ -123,7 +123,7 @@ for (key1, key2), value in faults.items():
         app.ClearOutputWindow() 
         fault = initiate_short_circuit('Central - Southern 400kV.ElmLne', fault_type=key1, phase=key2, start_time=start_time, end_time=start_time + 0.5)
         # Extract and save the simulation results
-        output = f'Model\Fault Localisation\Tester Model\Central_Southern_400kV\\{value}_fault{i}.csv'
+        output = f'Model\Fault Localisation\Tester Model\Central_Southern_400kV\\{value}_fault{i}.csv' #change directory if needed
         save_simulation_results(MONITORED_VARIABLES, output)
         # Clean up (delete) the fault object after the simulation
         fault.Delete()
