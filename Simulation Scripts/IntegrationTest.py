@@ -308,10 +308,14 @@ def locate_line(line):
    i = 0
    j = 0
    for (columnName,columnData) in filtered_df.items():
+       input_signal = columnData.values
+       factor = 400/max(input_signal)
+       input_signal = input_signal*factor
       if snr == 0:
-          filtered_signal = columnData.values
+          filtered_signal = input_signal/factor
       else:
-          signal_original = add_all_noises(columnData.values/5,noise_factors,snr)    
+          signal_original = add_all_noises(input_signal/5,noise_factors,snr) 
+          signal_original = signal_original/factor
           b,a = scipy.signal.cheby1(9, 1, 100, fs=2000, btype='lowpass')
           filtered_signal = scipy.signal.filtfilt(b, a, signal_original)
       signal_normalised = preprocessing.normalize([filtered_signal])
@@ -329,7 +333,7 @@ def locate_line(line):
    
    
    
-def extract_graph():
+def extract_graph(): #Extract graph attributes from dataframe
    app.PrintPlain(snr)
    waveforms = []
    graphs = []
@@ -345,10 +349,17 @@ def extract_graph():
    filtered_df = filtered_df.drop('t', axis=1)
    i = 0
    for (columnName, columnData) in filtered_df.items():
+       input_signal = columnData.values
+       if max(input_signal) != 0:
+           factor = 400/max(input_signal)
+           input_signal = input_signal/factor
+       else:
+           factor = 1
      if snr == 0:
-        filtered_signal = columnData.values
+        filtered_signal = input_signal/factor
      else:
-        signal_original = add_all_noises(columnData.values/5,noise_factors,snr)    
+        signal_original = add_all_noises(columnData.values/5,noise_factors,snr)  
+         signal_original = signal_original/factor
         b,a = scipy.signal.cheby1(9, 1, 100, fs=2000, btype='lowpass')
         filtered_signal = scipy.signal.filtfilt(b, a, signal_original)
      signal_normalised = preprocessing.normalize([filtered_signal])
@@ -588,10 +599,15 @@ X_input_csv = X_input_csv[['n:U:bus1:A', 'n:U:bus1:B', 'n:U:bus1:C','m:I:bus1:A'
 start_time = time.time()
 start = int(random.random()*0.1*2000)
 for (columnName,columnData) in X_input_csv.items():
+    input_signal = columnData[:1000].values
+    if max(input_signal) <1:
+        input_signal = input_signal*666
     if snr == 0:
-        filtered_signal = columnData.values
+        filtered_signal = input_signal
     else:
-        signal_original = add_all_noises(columnData[:1000].values/5,noise_factors,snr)    
+        signal_original = add_all_noises(input_signal/5,noise_factors,snr) 
+        if "I" in columnName:
+            signal_original = signal_original/666
         b,a = scipy.signal.cheby1(9, 1, 100, fs=2000, btype='lowpass')
         filtered_signal = scipy.signal.filtfilt(b, a, signal_original)
     signal_normalised = preprocessing.normalize([filtered_signal])
