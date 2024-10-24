@@ -51,7 +51,7 @@ class NodeGCN(nn.Module):
 
         # Fully connected layers
         self.fc1 = nn.Linear(out_channels, fc_hidden_size)
-        self.fc2 = nn.Linear(fc_hidden_size, out_channels)  # Adjust output size as needed
+        self.fc2 = nn.Linear(fc_hidden_size, out_channels) 
 
     def forward(self, x, edge_index, batch):
         x = self.conv1d_1(x)
@@ -88,7 +88,7 @@ class EdgeGCN(nn.Module):
 
         # Fully connected layers
         self.fc1 = nn.Linear(out_channels, fc_hidden_size)
-        self.fc2 = nn.Linear(fc_hidden_size, out_channels)  # Adjust output size as needed
+        self.fc2 = nn.Linear(fc_hidden_size, out_channels)  
 
     def forward(self, edge_attr, edge_index, batch):
         x = self.conv1d_1(edge_attr)
@@ -250,21 +250,21 @@ def save_simulation_results_loc(monitored_variables, output_file):
  
     print(f"Simulation results saved to {output_file}")
 
-def compute_wavelet(signal, i ,j,scales,data_cwt, start,
+def compute_wavelet(signal, i ,j,scales,data_cwt, start,         #compute wavelet for detection and classification
                  waveletname = 'morl'):
                    
     [coefficients, frequencies] = pywt.cwt(signal, scales, waveletname)
     coefficients = coefficients[:127,start:start+127]
     data_cwt[j,:,:,i] = np.abs(coefficients)
 
-def compute_wavelet_loc(signal, i ,j,scales, data_cwt, 
+def compute_wavelet_loc(signal, i ,j,scales, data_cwt,       #compute wavelet for localisation
                  waveletname = 'morl'):
     
     [coefficients, frequencies] = pywt.cwt(signal, scales, waveletname)
     coefficients = coefficients[:40,:40]
     data_cwt[j,:,:,i] = np.abs(coefficients)
 
-measured_From = {
+measured_From = {           #dictionary of lines and their reference busss
 'Central - Southern 400kV':'Busbar Central\BB2',
 'Central - Southern 400kV S1':'Busbar Southern-Central S1\BB1' ,
 'Eastern - NE 400kV 1':'Busbar NE- Eastern S1\BB1',
@@ -296,7 +296,7 @@ def locate_line(line):
    monitored_variables = {
     f'{line}.ElmLne': ['n:U:bus1:A', 'n:U:bus1:B', 'n:U:bus1:C','m:I:bus1:A', 'm:I:bus1:B', 'm:I:bus1:C'] 
    }
-   output = f'C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Integration\\Line.csv'
+   output = f'Results\\Integration\\Line.csv'
    save_simulation_results(monitored_variables, output)
    df = pd.read_csv(output)
    start_index = df[df['t'] == 0.02].index.min()
@@ -321,7 +321,7 @@ def locate_line(line):
       i += 1
       
    line1 =  re.sub(r'[\s-]+', '_', line)
-   model = tf.keras.models.load_model(f"C:\\Users\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\LineModels\\{line1}\\{line1}_10.keras")
+   model = tf.keras.models.load_model(f"LineModels_new\\{line1}\\{line1}_10.keras")
    location = model.predict(X_input)
    app.PrintPlain(f"Fault is located on {line} at {location[0][0]} km from {measured_From[line]}")
    
@@ -335,7 +335,7 @@ def extract_graph():
    graphs = []
    X_graphs = []
    count_nodes = 0
-   output = f'C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Integration\\Graph.csv'
+   output = f'Results\\Integration\\Graph.csv'
    save_simulation_results_loc(MONITORED_VARIABLES_1, output)
    graph = pd.read_csv(output)
    start_index = graph[graph['t'] == 0.02].index.min()
@@ -369,7 +369,7 @@ def extract_graph():
        count_nodes = 0
    return X_graphs
 
-def create_graph(graph):
+def create_graph(graph):  #creating graph object
   x = torch.tensor(graph[0])
   edge_index = torch.tensor([
     [0, 16, 5, 6, 5, 6, 5, 1, 2, 3, 7, 8, 14, 10, 9, 7, 11, 12, 13, 20, 16, 17, 18, 19],
@@ -539,7 +539,7 @@ MONITORED_VARIABLES_1 = {
 'Southern - Eastern 400kV_d.ElmLne': ['m:I:bus1:A', 'm:I:bus1:B', 'm:I:bus1:C', 'n:U:bus1:A', 'n:U:bus1:B', 'n:U:bus1:C'],
 }
 
-locations = [i for i in range(101)]
+locations = [i for i in range(101)] #can be used if needed to loop through all locations
 
 snr_levels = [0,20,30] 
 
@@ -555,18 +555,19 @@ faults = {
     (3, 1): 'BCG',
     (3, 2): 'ACG'
 }
-with open("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\ordinal_encoder.pickle", 'rb') as f:
+with open("ordinal_encoder.pickle", 'rb') as f:
   ordinal_encoder = pickle.load(f)
-with open("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\label_encoder.pickle", 'rb') as f:
+with open("label_encoder.pickle", 'rb') as f:
   label_encoder = pickle.load(f)
     
 X_input = np.ndarray(shape=(1, 127, 127, 6), dtype=np.float32)
 
 random_num = random.randint(0,9)
 
-(key1, key2), value = list(faults.items())[random_num]
+(key1, key2), value = list(faults.items())[random_num] #choosing a random fault type
 
 start_time = 0
+total_time = 0
 app.ResetCalculation()
 app.ClearOutputWindow() 
 initiate = True
@@ -575,12 +576,11 @@ if initiate == False:
 loc = random.randint(0,100)
 fault = initiate_short_circuit('SE - NW 400kV_a.ElmLne',fault_location=loc, fault_type=key1, phase=key2, start_time=start_time, end_time=start_time + 0.5, initiate=initiate)
 # Extract and save the simulation results
-output = f'C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Integration\\{value}_fault.csv'
+output = f'Results\\Integration\\{value}_fault.csv'
 save_simulation_results(MONITORED_VARIABLES, output)
-# Clean up (delete) the fault object after the simulation
 
 
-snr = np.random.choice(snr_levels)
+snr = np.random.choice(snr_levels) #choose a random snr level
 j = 0
 i = 0
 X_input_csv = pd.read_csv(output)
@@ -600,46 +600,48 @@ for (columnName,columnData) in X_input_csv.items():
 end_time = time.time()
 app.PrintPlain(snr)
 app.PrintPlain(f"Feature Extraction conducted in {end_time-start_time}s")#messagebox.showinfo("Feature Extraction", f"Feature Extraction conducted in {end_time-start_time}s")
+total_time += end_time-start_time
 ## Detection
 start_time = time.time()
-detect = joblib.load("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Detector\\DETECT_4\\DetectionModel_mixed_noise_1.joblib")
+detect = joblib.load("DetectionModel_mixed_noise_2.joblib") #accessing detection model
 pred = detect.predict(X_input)
 pred_encoded = (pred > 0.5).astype(int)
 pred_class = ordinal_encoder.inverse_transform(pred_encoded.reshape(-1,1))
 end_time = time.time()
-
+total_time += end_time-start_time
 if pred_class=='Fault Detected':
    app.PrintPlain(f"Fault Detected in {end_time-start_time}s.")#messagebox.showinfo("Fault Detected", f"Fault Detected in {end_time-start_time}s.")
    start_time = time.time()
-   classify = joblib.load("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Classifier\\CLASSIFY_4\\ClassificationModel_mixed_noise_1.joblib")
+   classify = joblib.load("ClassificationModel_mixed_noise_2.joblib") #accessing the classification model
    pred = classify.predict(X_input)
    pred_encoded = (pred > 0.5).astype(int)
    pred_indices = np.argmax(pred_encoded, axis=1)
    pred_class = label_encoder.inverse_transform(pred_indices)
    end_time = time.time()
+   total_time += end_time-start_time
    if pred_class[0] == 'NNNN':
         app.PrintPlain("No Fault Detected")#messagebox.showinfo("Classification", "No Fault Detected")
    else:
         app.PrintPlain(f"{pred_class[0]} fault detected in {end_time-start_time}s")#messagebox.showinfo("Fault Classified", f"{pred_class} fault detected in {end_time-start_time}s")
         # go to location algorithm
-        with open("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Locator\\NodeGCN\\graph_nodes_ordinal_encoder.pkl",'rb') as f:
+        with open("graph_nodes_ordinal_encoder.pkl",'rb') as f:
              ordinal_encoder_node = pickle.load(f)
-        with open("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Locator\\EdgeGCN\\graph_edges_ordinal_encoder.pkl",'rb') as f:
+        with open("graph_edges_ordinal_encoder.pkl",'rb') as f:
              ordinal_encoder_edge = pickle.load(f)
         start_time = time.time()
         graph = extract_graph()
         app.PrintPlain("Extracted Graph")
         data = create_graph(graph)
         app.PrintPlain("Create Data Object")
-        node_preds, edge_preds = prediction(data, torch.load("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Locator\\NodeGCN\\model_node_1.pth"), torch.load("C:\\Users\\Aimee Simons\\Desktop\\2024\\Lectures\\Semester 2\\Final Thesis\\Code\\Results\\Locator\\EdgeGCN\\model_edge.pth"))
-        node_preds = ordinal_encoder_node.inverse_transform(node_preds.reshape(-1,1))
+        node_preds, edge_preds = prediction(data, torch.load("model_node_2.pth"), torch.load("model_edge_2.pth")) #predicting the nodes and edges
+        node_preds = ordinal_encoder_node.inverse_transform(node_preds.reshape(-1,1)) 
         edge_preds = ordinal_encoder_edge.inverse_transform(edge_preds.reshape(-1,1))
         app.PrintPlain(node_preds)
         app.PrintPlain(edge_preds)
         #locate_line("Central - Southern 400kV S1")
         if node_preds[0][0] == 'Line':
             line = edge_preds[0][0]
-            if line=='SE - NW 400kV_a':
+            if line=='SE - NW 400kV_a': #this can be replaced with the selected line
               locate_line(line)
             else:
               locate_line("SE - NW 400kV_a") #if the model guesses incorrectly
@@ -647,6 +649,8 @@ if pred_class=='Fault Detected':
          app.PrintPlain(f'Fault occurred on Bus {node_preds[0][0]}')  
         end_time = time.time()
         app.PrintPlain(f"Location algorithm completed in {end_time-start_time}s")
+        total_time += end_time-start_time
+        app.PrintPlain(f"Total Time for completion: {total_time}s")
         fault.Delete()
 else:
     app.PrintPlain("No Fault Detected")#messagebox.showinfo("Detection", "No Fault Detected")
