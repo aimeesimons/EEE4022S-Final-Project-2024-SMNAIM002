@@ -23,6 +23,8 @@ This repository contains the following directories and files:
   - LineModels_new/ -> all the saved line models
   - ClassificationModel_mixed_noise_2.joblib -> Classification Model
   - DetectionModel_mixed_noise_2.joblib -> Detection Model
+  - ClassificationModel_mixed_noise_1.joblib -> Classification Model initial
+  - DetectionModel_mixed_noise_1.joblib -> Detection Model initial
   - graphs_edges_ordinal_encoder1.pkl -> used for encoding and decoding the respective labels for each graph
   - graphs_nodes_ordinal_encoder1.pkl -> used for encoding and decoding the respective labels for each graph
   - label_encoder.pickle -> used for encoding and decoding the labels for the classification model

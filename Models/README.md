@@ -1,0 +1,5 @@
+## These are the models associated with each task
+
+NB. DetectionModel_mixed_noise_2.joblib and ClassificationModel_mixed_noise_2.joblib, were trained using a newer version of tensorflow. There seemed to be an upated to the library either just before or after training occurred. As such, the .joblib extension had become obsolete and therefore, the models cannot be loaded. For context, this same version of tensoflow was used to train DetectionModel_mixed_noise1.joblib and ClassificationModel_mixed_noise1.joblib, but they can be loaded just fine. 
+The initial models were trained using incorrect noise functions, which were corrected to train the second batch (DetectionModel_mixed_noise_2.joblib and ClassificationModel_mixed_noise_2.joblib). However, it has been found that despite being trained with the incorrect noise functions, the first batch models are still quite accurate when the updated noise functions are applied to the signals.
+ 
