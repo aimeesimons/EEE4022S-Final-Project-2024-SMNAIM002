@@ -16,3 +16,7 @@ This folder will contain:
 - X_classify_input_noisy_fixed1.pkl -> this is the second half of the dataset used for training
 - GraphList_edges_classify1.pickle -> this is the list of Graph Objects used for training
 - GraphList_nodes_classify1.pickle -> this is the list of Graph Objects used for training
+- X_locate_nodes_classify1.pickle -> this is the raw data for the construction of the graphs for the node model
+- X_locate_edges_classify1.pickle -> this is the raw data for the construction of the graphs for the edge model
+- y_locate_nodes_labels1.pickle -> these are the labels for the respective graphs for the node model
+- y_locate_edges_labels1.pickle -> these are the labels for the respective graphs for the edge model

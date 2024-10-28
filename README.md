@@ -10,8 +10,8 @@ This repository contains the following directories and files:
   - Noise.ipynb
 - Data/ (which pertains to the label data and linked datasets)
 - DigSilent Models/  (which pertains to the scripts used to collect and prepare the data for training)
-  - FinalModelEEE4002S -> which is the 21-Bus system
-  - TesterModelEEE4022S -> which is the built tester model
+  - FinalModelEEE4002S_1 -> which is the 21-Bus system
+  - TesterModelEEE4022S_1 -> which is the built tester model
 - Model Training/ (which pertains to the Python files utilised in training the respective models)
   - X_classify.py
   - X_detect.py

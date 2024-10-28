@@ -7,4 +7,4 @@
 - X_locate_graphs_NodesCNN.py -> which trains the node model
 - X_locator_test.py -> which tests the line location models on 15 locations.
 
-All datasets can be found in * Data/ *. 
+All datasets can be found in * Data/ *. A machine with at least 32GB of RAM is required to train the detection and classification models, while a machine with at least 16GB is required to train the Graph Models. 
